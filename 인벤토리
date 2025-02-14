@@ -1,0 +1,74 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+[System.Serializable]
+public class InventoryItem
+{
+    public string itemName;
+    public int quantity;
+
+    public InventoryItem(string name, int qty)
+    {
+        itemName = name;
+        quantity = qty;
+    }
+}
+
+public class Inventory : MonoBehaviour
+{
+    public List<InventoryItem> items = new List<InventoryItem>();
+    public int maxItems = 150;
+
+    public bool AddItem(string itemName, int quantity)
+    {
+        // 전체 아이템 개수 확인
+        int totalItems = 0;
+        foreach (var item in items)
+            totalItems += item.quantity;
+
+        if (totalItems + quantity > maxItems)
+        {
+            Debug.Log("인벤토리가 가득 찼습니다!");
+            return false;
+        }
+
+        // 기존 아이템이 있는지 확인
+        InventoryItem existingItem = items.Find(item => item.itemName == itemName);
+        if (existingItem != null)
+        {
+            existingItem.quantity += quantity;
+        }
+        else
+        {
+            items.Add(new InventoryItem(itemName, quantity));
+        }
+
+        Debug.Log($"{itemName} {quantity}개 추가됨");
+        return true;
+    }
+
+    public bool RemoveItem(string itemName, int quantity)
+    {
+        InventoryItem existingItem = items.Find(item => item.itemName == itemName);
+        
+        if (existingItem != null && existingItem.quantity >= quantity)
+        {
+            existingItem.quantity -= quantity;
+
+            if (existingItem.quantity == 0)
+                items.Remove(existingItem);
+
+            Debug.Log($"{itemName} {quantity}개 제거됨");
+            return true;
+        }
+
+        Debug.Log($"{itemName}이 부족합니다.");
+        return false;
+    }
+
+    public bool HasItem(string itemName, int quantity)
+    {
+        InventoryItem existingItem = items.Find(item => item.itemName == itemName);
+        return existingItem != null && existingItem.quantity >= quantity;
+    }
+}
