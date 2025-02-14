@@ -1,0 +1,49 @@
+using UnityEngine;
+
+public class Hotbar : MonoBehaviour
+{
+    public string[] hotbarSlots; // 단축창 슬롯 (최대 7개)
+    private int maxSlots = 3; // 기본적으로 3개의 슬롯만 활성화됨
+
+    public void AddItemToHotbar(string itemName)
+    {
+        for (int i = 0; i < maxSlots; i++)
+        {
+            if (string.IsNullOrEmpty(hotbarSlots[i]))
+            {
+                hotbarSlots[i] = itemName;
+                Debug.Log($"{itemName}이 단축창 {i + 1}번 슬롯에 추가되었습니다.");
+                return;
+            }
+        }
+        Debug.Log("단축창이 가득 찼습니다!");
+    }
+
+    public void UseItemFromHotbar(int slotIndex)
+    {
+        if (slotIndex < maxSlots && !string.IsNullOrEmpty(hotbarSlots[slotIndex]))
+        {
+            Debug.Log($"{hotbarSlots[slotIndex]} 아이템을 사용했습니다.");
+            hotbarSlots[slotIndex] = null; // 사용 후 제거
+        }
+        else
+        {
+            Debug.Log("해당 슬롯에 아이템이 없습니다.");
+        }
+    }
+
+    public bool IncreaseHotbarSlots()
+    {
+        if (maxSlots < 7)
+        {
+            maxSlots++;
+            Debug.Log($"단축창 슬롯이 {maxSlots}개로 증가했습니다!");
+            return true;
+        }
+        else
+        {
+            Debug.Log("단축창 슬롯은 최대 7개까지 가능합니다.");
+            return false;
+        }
+    }
+}
