@@ -1,0 +1,24 @@
+using UnityEngine;
+
+public class Crafting : MonoBehaviour
+{
+    public Inventory inventory; // 인벤토리 참조
+    public GameObject axePrefab; // 도끼 프리팹
+
+    public void CraftAxe()
+    {
+        if (inventory.HasItem("Branch", 1) && inventory.HasItem("Stone", 1))
+        {
+            inventory.RemoveItem("Branch", 1);
+            inventory.RemoveItem("Stone", 1);
+
+            // 도끼 생성
+            Instantiate(axePrefab, transform.position, Quaternion.identity);
+            Debug.Log("도끼 제작 완료!");
+        }
+        else
+        {
+            Debug.Log("재료가 부족합니다.");
+        }
+    }
+}
