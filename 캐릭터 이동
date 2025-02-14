@@ -1,0 +1,27 @@
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+    public float moveSpeed = 5f; // 캐릭터 이동 속도
+
+    private Rigidbody2D rb;
+    private Vector2 movement;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        // 입력 처리 (WASD 또는 방향키)
+        movement.x = Input.GetAxisRaw("Horizontal"); // 좌우 입력
+        movement.y = Input.GetAxisRaw("Vertical");   // 상하 입력
+    }
+
+    void FixedUpdate()
+    {
+        // 물리 이동 처리
+        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+    }
+}
