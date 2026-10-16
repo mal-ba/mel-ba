@@ -65,14 +65,23 @@ public class Hotbar : MonoBehaviour
 
         string itemName = hotbarSlots[slotIndex];
 
-        // 인벤토리가 연결되어 있으면 실제 아이템을 소모
-        if (inventory != null && !inventory.RemoveItem(itemName, 1))
+        // 인벤토리에 아이템이 없으면 슬롯 비우기
+        if (inventory != null && !inventory.HasItem(itemName, 1))
         {
+            Debug.Log($"{itemName}이(가) 인벤토리에 없습니다.");
             hotbarSlots[slotIndex] = null;
             return;
         }
 
         Debug.Log($"{itemName} 아이템을 사용했습니다.");
+
+        // 도구(도끼 등)는 사용해도 사라지지 않음
+        if (ItemNames.IsTool(itemName))
+            return;
+
+        // 소모품은 인벤토리가 연결되어 있으면 실제로 1개 소모
+        if (inventory != null)
+            inventory.RemoveItem(itemName, 1);
 
         // 남은 아이템이 없으면 슬롯 비우기
         if (inventory == null || !inventory.HasItem(itemName, 1))
