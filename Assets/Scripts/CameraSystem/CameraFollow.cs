@@ -9,11 +9,21 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
+        if (target == null)
+        {
+            Debug.LogWarning("CameraFollow: target이 지정되지 않았습니다.");
+            enabled = false;
+            return;
+        }
+
         offset = transform.position - target.position;
     }
 
     void LateUpdate()
     {
+        if (target == null)
+            return;
+
         Vector3 targetPosition = target.position + offset;
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing * Time.deltaTime);
     }
